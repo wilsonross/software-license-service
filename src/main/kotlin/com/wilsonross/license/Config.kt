@@ -2,6 +2,7 @@ package com.wilsonross.license
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
@@ -48,11 +49,9 @@ class Config(private val properties: LicenseProperties) {
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        /*http.csrf().disable().authorizeHttpRequests().requestMatchers(HttpMethod.POST, "/api/license/validate")
-            .permitAll().anyRequest().authenticated().and()
-            .addFilter(BasicAuthenticationFilter(AuthenticationManager())).sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)*/
-        http.cors().disable().csrf().disable().addFilterAfter(authorizationFilter(), BasicAuthenticationFilter::class.java)
+        http.csrf()
+            .disable()
+            .addFilterAfter(authorizationFilter(), BasicAuthenticationFilter::class.java)
 
         return http.build()
     }

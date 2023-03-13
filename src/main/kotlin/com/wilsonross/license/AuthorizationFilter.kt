@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.stereotype.Component
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.web.filter.GenericFilterBean
 import java.io.IOException
 import java.util.*
@@ -18,6 +18,7 @@ import java.util.*
 class AuthorizationFilter() : GenericFilterBean() {
     @Value("\${license.token}")
     private val token: String? = null
+    private val applyOnUrl = AntPathRequestMatcher("/api/license/create")
 
     @Throws(IOException::class, ServletException::class)
     override fun doFilter(
@@ -25,11 +26,18 @@ class AuthorizationFilter() : GenericFilterBean() {
         response: ServletResponse?,
         chain: FilterChain
     ) {
-        val header = (request as HttpServletRequest).getHeader("Authorization")
+        // Checks if filter should apply on URL
+        if (!applyOnUrl.matches(request as HttpServletRequest)) {
+            return (response as HttpServletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED)
+        }
+
+        // Checks if token exists in header
+        val header = request.getHeader("Authorization")
         if (header == null || !header.startsWith("Bearer")) {
             return (response as HttpServletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED)
         }
 
+        // Retrieves and checks token
         val auth = this.getAuth(request)
             ?: return (response as HttpServletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED)
 
