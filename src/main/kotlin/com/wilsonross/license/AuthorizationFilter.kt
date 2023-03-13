@@ -28,7 +28,7 @@ class AuthorizationFilter() : GenericFilterBean() {
     ) {
         // Checks if filter should apply on URL
         if (!applyOnUrl.matches(request as HttpServletRequest)) {
-            return (response as HttpServletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED)
+            return chain.doFilter(request, response)
         }
 
         // Checks if token exists in header

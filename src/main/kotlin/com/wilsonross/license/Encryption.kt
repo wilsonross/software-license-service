@@ -32,7 +32,7 @@ class Encryption(
     }
 
     fun decrypt(strToDecrypt: String, secretKey: SecretKey): String {
-        val decoded =  this.decoder.decode(strToDecrypt)
+        val decoded = this.decoder.decode(strToDecrypt)
         val iv = decoded.copyOfRange(0, 16)
         val encryptedBytes = decoded.copyOfRange(16, decoded.size)
         val ivSpec = IvParameterSpec(iv)
