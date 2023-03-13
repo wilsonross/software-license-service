@@ -36,6 +36,9 @@ class LicenseController(private val properties: LicenseProperties, private val e
         } catch (e: IllegalArgumentException) {
             // Decryption error
             return ResponseEntity<Any>(HttpStatus.NOT_FOUND)
+        } catch (e: IndexOutOfBoundsException) {
+            // Decryption error
+            return ResponseEntity<Any>(HttpStatus.NOT_FOUND)
         }
 
         return ResponseEntity<Any>(HttpStatus.NOT_FOUND)
