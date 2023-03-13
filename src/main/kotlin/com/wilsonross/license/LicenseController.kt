@@ -5,6 +5,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.decodeFromString
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 class LicenseController(private val properties: LicenseProperties, private val encryption: Encryption) {
 
     @PostMapping("/create")
-    fun create(@RequestBody createBody: CreateBody): String {
+    fun create(@RequestHeader header: Map<String, String>, @RequestBody createBody: CreateBody): String {
         // Serialize
         val license = StoredLicense(createBody.firstName, createBody.lastName, createBody.softwarePackage)
         val serializedLicense = Json.encodeToString(license)
