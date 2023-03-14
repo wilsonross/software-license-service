@@ -22,6 +22,16 @@ class LicenseApplicationTests(
     private val createUrl = "/api/license/create"
     private val validateUrl = "/api/license/validate"
 
+   @Test
+   fun `Assert that 401 response is issued if user not auth`() {
+       val headers = HttpHeaders()
+       val license = StoredLicense("firstName", "lastName", "spring")
+       val request = HttpEntity<StoredLicense>(license, headers)
+
+       val result = restTemplate.postForEntity<String>(createUrl, request)
+       Assert.isTrue(result.statusCode == HttpStatus.UNAUTHORIZED, "result must have unauthorized status code")
+   }
+
     @Test
     fun `Assert that license key is created with successful authorization`() {
         val bearer = Base64.getEncoder().encodeToString(properties.token.toByteArray())

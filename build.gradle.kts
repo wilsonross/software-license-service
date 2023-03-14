@@ -22,6 +22,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+	implementation("org.apache.httpcomponents.client5:httpclient5:5.2.1")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
