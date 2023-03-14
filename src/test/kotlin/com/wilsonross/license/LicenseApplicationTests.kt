@@ -19,8 +19,8 @@ class LicenseApplicationTests(
     @Autowired private val restTemplate: TestRestTemplate,
     @Autowired private val properties: LicenseProperties
 ) {
-    private val createUrl = "/api/license/create"
-    private val validateUrl = "/api/license/validate"
+    private final val createUrl = "/api/license/create"
+    private final val validateUrl = "/api/license/validate"
 
    @Test
    fun `Assert that 401 response is issued if user not auth`() {
@@ -28,7 +28,7 @@ class LicenseApplicationTests(
        val license = StoredLicense("firstName", "lastName", "spring")
        val request = HttpEntity<StoredLicense>(license, headers)
 
-       val result = restTemplate.postForEntity<String>(createUrl, request)
+       val result = this.restTemplate.postForEntity<String>(createUrl, request)
        Assert.isTrue(result.statusCode == HttpStatus.UNAUTHORIZED, "result must have unauthorized status code")
    }
 
@@ -41,7 +41,7 @@ class LicenseApplicationTests(
         val license = StoredLicense("firstName", "lastName", "spring")
         val request = HttpEntity<StoredLicense>(license, headers)
 
-        val result = restTemplate.postForEntity<String>(createUrl, request)
+        val result = this.restTemplate.postForEntity<String>(createUrl, request)
         Assert.isTrue(result.body!!.length == 128, "should have a specific length")
     }
 
@@ -52,7 +52,7 @@ class LicenseApplicationTests(
 
         val validation = ValidationRequest("firstName", "lastName", license)
         val request = HttpEntity<ValidationRequest>(validation)
-        val result = restTemplate.postForEntity<Any>(validateUrl, request)
+        val result = this.restTemplate.postForEntity<Any>(validateUrl, request)
         Assert.isTrue(result.statusCode == HttpStatus.NO_CONTENT, "result must have successful status code")
     }
 
@@ -60,7 +60,7 @@ class LicenseApplicationTests(
     fun `Assert that 404 response returned on unsuccessful license validation`() {
         val validation = ValidationRequest("firstName", "lastName", "dGVzNDjWNodA==")
         val request = HttpEntity<ValidationRequest>(validation)
-        val result = restTemplate.postForEntity<Any>(validateUrl, request)
+        val result = this.restTemplate.postForEntity<Any>(validateUrl, request)
         Assert.isTrue(result.statusCode == HttpStatus.NOT_FOUND, "result must have a not found status code")
     }
 }

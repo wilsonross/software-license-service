@@ -45,6 +45,11 @@ class AuthorizationFilter() : GenericFilterBean() {
         chain.doFilter(request, response)
     }
 
+    /**
+     * Check bearer token is equal to our secret
+     * @param request
+     * @return authentication token object or null
+     */
     private fun getAuth(request: HttpServletRequest): UsernamePasswordAuthenticationToken? {
         val token = request.getHeader("Authorization")
         val tokenValue = token.replace("Bearer ", "")
